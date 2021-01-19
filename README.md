@@ -73,6 +73,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.hosts`            | ingress hosts                                   | `[superset.domain.com]`                                      |
 | `ingress.path`             | ingress path                                    | `\`                                                          |
 | `ingress.tls`              | ingress tls                                     | `[]`                                                         |
+| `supersetAssetsPath`       | path where superset assets are stored           | `/usr/local/lib/python3.6/site-packages/superset/static/assets`|
+| `imageAssets`              | `filename: "[base64-encoded image]"` for white-labeling, overwrite existing asset files | `{}`                                                         |
 
  see [values.yaml](./values.yaml)
 
