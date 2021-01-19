@@ -1,0 +1,24 @@
+---
+replicaCount: 2
+
+image:
+  repository: "onaio/superset"
+  tag: "0.37.2"
+
+
+initFile: "--set-file"
+extraArguments: [ "development-mode" ]
+# extraSecureArguments: []
+
+configFile: "--set-file"
+
+## Init Job configuration.
+init:
+  enabled: false
+  initFile: "--set-file"
+  extraArguments: []
+  #extraSecureArguments: []
+
+service:
+  type: ClusterIP
+  port: 8088

@@ -1,0 +1,101 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+workflows:
+  version: 2
+  build-and-release:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      # - package:
+      #     requires:
+      #       - build
+      #     filters:
+      #       tags:
+      #         only: /^\d+\.\d+\.\d+(-.*)?$/
+      #       branches:
+      #         ignore: /.*/
+      # - release:
+      #     requires:
+      #       - package
+      #     filters:
+      #       tags:
+      #         only: /^\d+\.\d+\.\d+(-.*)?$/
+      #       branches:
+      #         ignore: /.*/
+jobs:
+  build:
+    machine:
+      image: circleci/classic:201808-01
+
+    working_directory: ~/repo
+
+    environment:
+
+    steps:
+
+      - run: touch $BASH_ENV || true
+
+      - checkout
+
+      - run: .circleci/init_go.sh
+      - run: go version
+
+      - run: test/kind/ensure_kind_cluster.sh
+      - run: test/kind/env.sh scripts/ensure_ecr_on_k8n.sh $DOCKER_REGISTRY default
+
+      # run tests!
+      - run: (cd test; go version)
+      - run: (cd test; go mod download)
+      - run: (cd test; kind/env.sh go test)
+
+      # # Download and cache dependencies
+      # - restore_cache:
+      #     keys:
+      #       - v1-dependencies-{{ checksum "build.gradle" }}
+      #       # fallback to using the latest cache if no exact match is found
+      #       - v1-dependencies-
+
+      # - save_cache:
+      #     paths:
+      #       - ~/.gradle
+      #     key: v1-dependencies-{{ checksum "build.gradle" }}
+
+  # package:
+  #   docker:
+  #     - image: circleci/xxx
+
+  #   working_directory: ~/repo
+
+  #   environment:
+  #     TERM: dumb
+
+  #   steps:
+  #     - checkout
+
+  #     # package!
+  #     # - run:
+
+  #     - persist_to_workspace:
+  #         root: ./build
+  #         paths: libs
+
+  # release:
+  #   docker:
+  #     - image: cibuilds/xxx
+  #   steps:
+  #     - attach_workspace:
+  #         at: ./build
+
+  #     - run:
+
+  #     - run:
+  #         name: "Publish Release on GitHub"
+  #         # NOTE: Store release under github tag CIRCLE_TAG not version in code
+  #         # These should line up for official releases, but won't for feature-branch packaging for tests
+  #         command: |
+  #           ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./build/libs
