@@ -18,7 +18,7 @@ import (
 )
 
 func MustReadFile(filename string) []byte {
-    data, err := ioutil.ReadFile("examples/whitelabel/assets/images/favicon.png")
+    data, err := ioutil.ReadFile(filename)
     if err != nil {
         panic(err)
     }
@@ -55,9 +55,9 @@ func TestBasicChartDeploy(t *testing.T) {
             "init.initFile": "examples/whitelabel/init.init.sh",
         },
         SetValues: map[string]string{
-            "imageAssets.favicon\\.png": base64.StdEncoding.EncodeToString(MustReadFile("examples/whitelabel/assets/images/favicon.png")),
-            "imageAssets.superset\\.png": base64.StdEncoding.EncodeToString(MustReadFile("examples/whitelabel/assets/images/superset.png")),
-            "imageAssets.superset-logo-horiz\\.png": base64.StdEncoding.EncodeToString(MustReadFile("examples/whitelabel/assets/images/superset-logo-horiz.png")),
+            "assets.images.favicon\\.png": base64.StdEncoding.EncodeToString(MustReadFile("examples/whitelabel/assets/images/favicon.png")),
+            "assets.images.superset\\.png": base64.StdEncoding.EncodeToString(MustReadFile("examples/whitelabel/assets/images/superset.png")),
+            "assets.images.superset-logo-horiz\\.png": base64.StdEncoding.EncodeToString(MustReadFile("examples/whitelabel/assets/images/superset-logo-horiz.png")),
         },
     }
     
