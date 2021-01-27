@@ -7,10 +7,22 @@ metadata:
     chart: {{ include "superset.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{- $binaryExts := (list ".png" ".jpg" ".jpeg") }}
+data:
+  {{- $assetsLines := (splitList "\n" (trim (include "superset.nestedAssets" .))) }}
+  {{- range $line := $assetsLines }}
+    {{- $path := (index (splitList ":" $line) 0) }}
+    {{- $data := (index (regexSplit "^[^:]+:" $line -1) 1) }}
+    {{- if not (has (ext $path) $binaryExts) }}
+  "{{ print ($path | replace "/" "..") }}": {{ $data | quote }}
+    {{- end }}
+  {{- end }}
 binaryData:
   {{- $assetsLines := (splitList "\n" (trim (include "superset.nestedAssets" .))) }}
   {{- range $line := $assetsLines }}
     {{- $path := (index (splitList ":" $line) 0) }}
     {{- $data := (index (splitList ":" $line) 1) }}
+    {{- if has (ext $path) $binaryExts }}
   "{{ print ($path | replace "/" "..") }}": "{{ print $data }}"
+    {{- end }}
   {{- end }}

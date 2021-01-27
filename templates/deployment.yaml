@@ -92,7 +92,6 @@ spec:
             {{- $assetsLines := (splitList "\n" (trim (include "superset.nestedAssets" .))) }}
             {{- range $line := $assetsLines }}
               {{- $path := (index (splitList ":" $line) 0) }}
-              {{- $data := (index (splitList ":" $line) 1) }}
             - name: superset-assets
               mountPath: "{{ $assetsPath }}/{{ $path }}"
               subPath: "{{ ($path | replace "/" "..") }}"
