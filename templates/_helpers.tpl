@@ -61,3 +61,29 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Traverse all binary assets and create path names for them with data
+*/}}
+{{- define "superset.nestedAssets" -}}
+  {{- $root := .Values.assets }}
+  {{- $fringe := list (tuple (list) $root) }}
+  {{- $max := (len (splitList "\n" ($fringe | toPrettyJson))) }}
+  {{- range $i := (until $max) }}
+    {{- $next := (first $fringe) }}
+    {{- if not (kindIs "invalid" $next) }}
+      {{- $fringe = (rest $fringe) }}
+      {{- $nextPath := (index $next 0) }}
+      {{- $nextEl := (index $next 1) }}
+      {{- if (kindIs "map" $nextEl) }}
+        {{- range $k, $v := $nextEl }}
+          {{- $childPath := (append $nextPath $k) }}
+          {{- $fringe = (prepend $fringe (tuple $childPath $v)) }}
+        {{- end }}
+      {{- end }}
+      {{- if (kindIs "string" $nextEl) }}
+{{ print ($nextPath | join "/") }}:{{ print $nextEl }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

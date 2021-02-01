@@ -34,9 +34,9 @@ spec:
         - name: superset-configs
           secret:
             secretName: {{ include "superset.fullname" . }}
-        - name: superset-assets-images
+        - name: superset-assets
           configMap:
-            name: {{ include "superset.fullname" . }}-assets-images
+            name: {{ include "superset.fullname" . }}-assets
         - name: storage-volume
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
@@ -86,13 +86,15 @@ spec:
           volumeMounts:
             - name: superset-configs
               mountPath: /home/superset
-            - name: superset-assets-images
-              mountPath: /home/superset/assets/images
+            - name: superset-assets
+              mountPath: /home/superset/release-assets
             {{- $assetsPath  := .Values.supersetAssetsPath -}}
-            {{- range $key, $val := .Values.imageAssets }}
-            - name: superset-assets-images
-              mountPath: "{{ $assetsPath }}/images/{{ $key }}"
-              subPath: "{{- $key }}"
+            {{- $assetsLines := (splitList "\n" (trim (include "superset.nestedAssets" .))) }}
+            {{- range $line := $assetsLines }}
+              {{- $path := (index (splitList ":" $line) 0) }}
+            - name: superset-assets
+              mountPath: "{{ $assetsPath }}/{{ $path }}"
+              subPath: "{{ ($path | replace "/" "..") }}"
             {{- end }}
             - name: storage-volume
               mountPath: /var/lib/superset
