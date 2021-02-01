@@ -91,10 +91,12 @@ spec:
             {{- $assetsPath  := .Values.supersetAssetsPath -}}
             {{- $assetsLines := (splitList "\n" (trim (include "superset.nestedAssets" .))) }}
             {{- range $line := $assetsLines }}
-              {{- $path := (index (splitList ":" $line) 0) }}
+              {{- if contains ":" $line }}
+                {{- $path := (index (splitList ":" $line) 0) }}
             - name: superset-assets
               mountPath: "{{ $assetsPath }}/{{ $path }}"
               subPath: "{{ ($path | replace "/" "..") }}"
+              {{- end }}
             {{- end }}
             - name: storage-volume
               mountPath: /var/lib/superset

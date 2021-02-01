@@ -43,7 +43,7 @@ $ git clone https://github.com/apache/superset.git
 $ cd superset/superset-frontend
 $ npm install
 [ edit ./stylesheet/less files ]
-$ npm prod
+$ npm run prod
 $ cp ../superset/static/assets/[theme|welcome].<hash>.entry.css path/to/whitelabel/assets
 ```
 
