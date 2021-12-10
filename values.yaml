@@ -31,11 +31,17 @@ init:
   enabled: true
   extraArguments: []
   extraSecureArguments: []
-
   initFile: |-
     #!/bin/sh
     echo "Upgrading DB schema ..."
     superset db upgrade
+  resources: {}
+  #  requests:
+  #    cpu: 50m
+  #    memory: 256Mi
+  #  limits:
+  #    cpu: 500m
+  #    memory: 750Mi
 
 initFile: |-
   if [ "$1" == "development-mode" ]; then
