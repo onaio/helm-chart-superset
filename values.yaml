@@ -255,3 +255,8 @@ readinessProbe:
 
 supersetAssetsPath: "/usr/local/lib/python3.6/site-packages/superset/static/assets"
 assets: {}
+
+pdb:
+  enabled: false
+  minAvailable: 1
+  maxUnavailable: ""
