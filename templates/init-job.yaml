@@ -104,5 +104,7 @@ spec:
           resources:
             {{- . | toYaml | nindent 12 }}
           {{- end }}
+          securityContext:
+            {{- toYaml .Values.init.securityContext | nindent 12 }}
       restartPolicy: Never
 {{- end }}
