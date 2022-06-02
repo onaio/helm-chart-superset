@@ -14,6 +14,8 @@ podSecurityContext:
   runAsUser: 1000
   fsGroup: 1000
 
+securityContext: {}
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -42,6 +44,7 @@ init:
   #  limits:
   #    cpu: 500m
   #    memory: 750Mi
+  securityContext: {}
 
 initFile: |-
   if [ "$1" == "development-mode" ]; then
