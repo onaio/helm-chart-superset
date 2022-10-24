@@ -97,7 +97,7 @@ AUTH_USER_REGISTRATION_ROLE = 'Public'
 # Will allow user self registration
 AUTH_USER_REGISTRATION = True
 # Set public role like Gamma
-PUBLIC_ROLE_LIKE_GAMMA = True
+PUBLIC_ROLE_LIKE = "Gamma"
 
 # ---------------------------------------------------
 # Image and file configuration
